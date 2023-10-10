@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ua">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue lesson 1</title>
+    <link rel="icon" href="./img/logo.png" type="image/png">
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script defer src="./js/script.js"></script>
+</head>
+
+<body>
+    <img class="logo" src="./img/logo.png" title="Vue.js" width="100" alt="">
+    <h1>Vue.js д/з №1</h1>
+    <h2>Вступ. Основи синтаксису</h2>
+    <div class="tasks">
+        <section class="task">
+            <div id="app1">
+                <details>
+                    <summary>Задача №1</summary>
+                    <p>
+                        Вводиться кількість пасажирів. Вивести: скільки потрібно автобусів (кожен автобус на 20
+                        місць), скільки пляшок води (кожному пасажиру 2 пляшки), скільки бутербродів (кожному пасажиру 3
+                        бутерброди)
+                    </p>
+                </details>
+                <div class="space-between">
+                    <label for="passengers">😃 Пасажирів:</label>
+                    <input id="passengers" type="number" min="1" title="Введіть кількість пасажирів" v-model="passengersCount">
+                </div>
+                <div class="space-between">
+                    <span>🚌 Автобусів:</span>
+                    <span>{{ busSum }}</span>
+                </div>
+                <div class="space-between">
+                    <span>🥤 Пляшок води:</span>
+                    <span>{{ bottlesSum }}</span>
+                </div>
+                <div class="space-between">
+                    <span>🥪 Бутербродів:</span>
+                    <span>{{ burgersSum }}</span>
+                </div>
+            </div>
+        </section>
+        <section class="task">
+            <div id="app2">
+                <details>
+                    <summary>Задача №2</summary>
+                    <p>
+                        Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти
+                        ….). Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом,
+                        осінь – жовтий ліс, …).
+                    </p>
+                </details>
+                <div class="space-between">
+                    <label for="month">Номер місяця:</label>
+                    <input id="month" type="number" min="1" max="12" title="Введіть номер місяця" v-model="month">
+                </div>
+                <span>{{ clothes }}</span>
+                <img :src="imageLink" width="320" height="320">
+            </div>
+        </section>
+        <section class="task">
+            <div id="app3">
+                <details>
+                    <summary>Задача №3</summary>
+                    <p>
+                        Задано початок та кінець діапазону. При натисканні на кнопку випадковим чином генерувати
+                        значення з вказаного діапазону та відображати його.
+                    </p>
+                </details>
+                <div class="space-between">
+                    <label for="start">Початок:</label>
+                    <input id="start" type="number" title="Введіть початок діапазону" v-model="start">
+                </div>
+                <div class="space-between">
+                    <label for="end">Кінець:</label>
+                    <input id="end" type="number" title="Введіть кінець діапазону" v-model="end">
+                </div>
+                <button @click="randomize">Згенерувати число</button>
+                <div>Результат: {{ random }}</div>
+            </div>
+        </section>
+        <section class="task">
+            <div id="app4">
+                <details>
+                    <summary>Задача №4</summary>
+                    <p>
+                        “Рахунок у банку” Вимоги: 1) Спочатку сума дорівнює 0 грн. Змінити суму у гривнях можна або
+                        зарахуванням на рахунок, або зняттям. 2) Сума автоматично переводиться у долари та євро
+                        (фіксований курс задається у data). 3) можливість зарахувати суму (контролювати, щоб не була
+                        від’ємною) 4) можливість зняти (щоб не можна зняти більше ніж є на рахунку) 5) при виконанні
+                        зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків
+                        автоматично) При зміні суми : - якщо було зняття, то суму відоражати червоним - якщо було
+                        зарахування, то суму відображати зеленим Якщо сума валюти менша за 100 то відображати червоним
+                        кольором, інакше - зеленим
+                    </p>
+                </details>
+                <div>💰 Сума на рахунку: <b :style="colorBalance">{{ showBalance }}</b> грн</div>
+                <div class="space-between">
+                    <label for="amount">Введіть суму:</label>
+                    <input id="amount" type="number" min="0" title="Введіть суму" v-model="inputMoney">
+                </div>
+                <div class="space-between">
+                    <button type="button" @click="depositMoney">Зарахувати</button>
+                    <button type="button" @click="withdrawMoney">Зняти</button>
+                </div>
+                <div class="space-between">
+                    <span>Комісія:</span>
+                    <span>{{ showTax }} грн</span>
+                </div>
+                <div class="space-between">
+                    <span>Сума у доларах:</span>
+                    <b :style="getColorUSD">{{ dollarBalance }} 💵</b>
+                </div>
+                <div class="space-between">
+                    <span>Сума у євро:</span>
+                    <b :style="getColorEUR">{{ euroBalance }} 💶</b>
+                </div>
+                <div class="error">{{ errorMessage }}</div>
+            </div>
+        </section>
+        <section class="task">
+            <div id="app5">
+                <details>
+                    <summary>Задача №5</summary>
+                    <p>
+                        Додаток містить масив об’єктів (логін, пароль) - існуючі логіни і паролі. Користувач вводить
+                        логін і пароль, а програма повідомляє чи може користувач бути авторизованим (чи є він одним з
+                        масиву).
+                    </p>
+                </details>
+                <div class="space-between">
+                    <label for="login">🔒 Login:</label>
+                    <input type="text" id="login" title="Введіть логін" v-model="login">
+                </div>
+                <div class="space-between">
+                    <label for="password">🔒 Password:</label>
+                    <input type="password" id="password" title="Введіть пароль" v-model="password">
+                </div>
+                <button @click="checkCredentials">Go</button>
+                <span :class="classMessage">{{ message }}</span>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

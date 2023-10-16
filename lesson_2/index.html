@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ua">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue lesson 2</title>
+    <link rel="icon" href="./img/logo.png" type="image/png">
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script defer src="./js/script.js"></script>
+</head>
+
+<body>
+    <img class="logo" src="./img/logo.png" title="Vue.js" width="100" alt="">
+    <h1>Vue.js д/з №2</h1>
+    <h2>Класи. Стилі. Умовне відображення. Списки</h2>
+    <div class="tasks">
+        <section class="task">
+            <div class="app" id="app1">
+                <details>
+                    <summary>Задача №1</summary>
+                    <p>
+                        Вводимо логіна і пароль. Якщо логін вірний відображаємо
+                        смайл. Якщо ні, то:<br> 1) якщо логін = Іван – колір повідомлення про
+                        помилку синій <br> 2) якщо хтось інший, то колір повідомлення червоний
+                    </p>
+                    <div class="task1">
+                        <img src="./img/task1/task1.jpg" alt="" />
+                        <form @submit.prevent="loginCheck" action="#" method="get">
+                            <div>
+                                <label for="login">Login:</label>
+                                <input id="login" type="text" v-model.trim="login" />
+                            </div>
+                            <div>
+                                <label for="password">Password:</label>
+                                <input id="password" type="password" v-model.trim="password" />
+                            </div>
+                            <button class="login-btn" :disabled="isCredentialsEmpty">GO</button>
+                            <span v-if="isUserUndefined" :class="getAuthMessageColor">Authorization error!</span>
+                            <img v-show="isUserAuthorized" alt="" src="./img/task1/smile.png" />
+                        </form>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app2">
+                <details>
+                    <summary>Задача №2</summary>
+                    <p>
+                        З випадаючого списку вибираємо клас квитка у літаку. Якщо <br>1) бізнес -
+                        виводимо елементи для вибору газети та коньяку (якщо вибрано коньяк,
+                        то запропонувати закуску (так/ні)), на фоні зображення бізнес кают <br>2)
+                        економ – виводимо елементи для вибору типу пива і чипсів, на фоні
+                        хмарки.
+                    </p>
+                    <div id="task2">
+                        <div class="selects">
+                            <span>Квиток:</span>
+                            <select v-model="selectTicket" @change="setSelectTicket()">
+                                <option disabled value="choose">Оберіть тип квитка</option>
+                                <option value="business">Бізнес</option>
+                                <option value="economy">Економ</option>
+                            </select>
+                            <select v-show="isBusiness" v-model="selectNewsOrCognac" @change="setSelectNewsOrCognac()">
+                                <option disabled value="choose">Що бажаєте?</option>
+                                <option value="cognac">Коньяк</option>
+                                <option value="newspaper">Газету</option>
+                            </select>
+                            <span v-show="showAppetizerTitle">Закуска:</span>
+                            <select v-show="showAppetizerSelect" v-model="selectAppetizer"
+                                @change="setSelectCognacAppetizer()">
+                                <option disabled value="choose">Закуску?</option>
+                                <option value="yes">Так</option>
+                                <option value="no">Ні</option>
+                            </select>
+                            <div v-show="showEconomAppetizer" class="econom-appetizer">
+                                <input id="chips" type="checkbox" :checked="isChips" @change="toggleChips()" />
+                                <label for="chips">Чипси</label>
+                                <input id="beer" type="checkbox" :checked="isBeer" @change="toggleBeer()" />
+                                <label for="beer">Пиво</label>
+                            </div>
+                        </div>
+                        <div>
+                            <template v-if="isBusinessNull"></template>
+                            <div v-else-if="isBusiness" class="relative-pos">
+                                <img class="background" src="./img/task2/businessСabins.jpg" alt="">
+                                <template v-if="isCognacNull"></template>
+                                <img v-else-if="isCognac" class="cognac" src="./img/task2/cognac.png" alt="" />
+                                <a v-else href="https://www.nytimes.com/international/" target="_blank">
+                                    <img class="newspaper" src="./img/task2/newspaper.png" alt="" />
+                                </a>
+                                <img class="lemon" v-show="showCongacAppetizer" src="./img/task2/lemon.png" alt="">
+                            </div>
+                            <div v-else class="relative-pos">
+                                <img class="background" src="./img/task2/economCabins.jpg" alt="">
+                                <img v-show="isChips" class="chips" src="./img/task2/chips.png" alt="" />
+                                <img v-show="isBeer" class="beer" src="./img/task2/beer.png" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app3">
+                <details>
+                    <summary>Задача №3</summary>
+                    <p>
+                        Елемент тренажера англійської. Виводимо зображення елемента і слово.
+                        Користувач вводить відповідь. Якщо вірно – відтворюємо фразу «Добре.
+                        Молодець!» (і додаємо зелену рамку до елемента), якщо ні - то
+                        відтворюємо фразу «Невірно, спробуйте ще раз» (і додаємо червону
+                        рамку).
+                    </p>
+                    <div id="task3">
+                        <img class="english-trainer-example" src="./img/task3/task3.jpg" alt="" />
+                        <div class="english-trainer" :class="getBorderColor">
+                            <img :src="exerciseItem.img" />
+                            <span class="word">{{exerciseItem.word}}</span>
+                            <span>Ваш переклад:</span>
+                            <input type="text" v-model.trim="translateValue" />
+                            <button v-if="isSuccessTranslation" @click="getRandomListItem()">Продовжити</button>
+                            <button v-else class="check-translate-btn" @click="checkTranslation()"
+                                :disabled="isBtnDisabled">Перевірити</button>
+                            <div>{{checkMessage}}</div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app4">
+                <details>
+                    <summary>Задача №4</summary>
+                    <p>
+                        Вивести список як маркований список з елементами у форматі (name:
+                        salary)
+                    </p>
+                    <div id="task4">
+                        <img src="./img/task4/task4.jpg" alt="" width="300" />
+                        <ul>
+                            <li v-for='worker in workersSalaryList' :key='worker.id'>
+                                {{worker.name}} : {{worker.salary}}
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app5">
+                <details>
+                    <summary>Задача №5</summary>
+                    <p>
+                        Самостійно сформуйте масив даних та виведіть фрагмент на зразок
+                        поданого (дані не обов’язково повинні співпадати)
+                    </p>
+                    <div id="task5">
+                        <img src="./img/task5/task5.jpg" alt="" width="600" />
+                        <div class="search-results">
+                            <div v-for="result in resultList" :key="result.id">
+                                <div class="header">
+                                    <a :href="result.link" target="_blank">
+                                        <img class="logo-link" :src="result.logo" />
+                                    </a>
+                                    <div class="links">
+                                        <a :href="result.link" target="_blank">{{result.name}}</a>
+                                        <a :href="result.link" target="_blank">{{result.link}}</a>
+                                    </div>
+                                </div>
+                                <a class="title-link" :href="result.link" target="_blank">
+                                    <h3>{{result.title}}</h3>
+                                </a>
+                                <div class="description">{{result.description}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app6">
+                <details>
+                    <summary>Задача №6</summary>
+                    <p>
+                        На кухню поступають замовлення. Спочатку ми додаємо їх у
+                        список “Очікують на виконання”, якщо повар береться робити —
+                        замовлення переходить у список “Виконуються”, якщо замовлення виконано
+                        — переходить у список “Готові до виносу”. Якщо натиснути на “Подано” -
+                        страва зникає з таблиці
+                    </p>
+                    <div id="task6">
+                        <img src="./img/task6/task6.jpg" alt="" width="600" />
+                        <label>Нова замовлена страва:
+                            <input type="text" v-model.trim="newDish" />
+                        </label>&nbsp;
+                        <button class="add-dish-btn" type="button" @click="addToWaitingList"
+                            :disabled="isNewDishBtnEmpty">Додати</button>
+                        <div class="kitchen-container">
+                            <div class="waiting-container">
+                                <span>Очікують на виконання:</span>
+                                <div>
+                                    <div v-for="dish in waitingList" :key="dish.id">
+                                        <div class="waiting-list">
+                                            <span>{{dish.name}}</span>
+                                            <button type="button" @click="addToProcessingList(dish)">Готувати</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="processing-container">
+                                <span>Виконуються:</span>
+                                <div>
+                                    <div v-for="dish in processingList" class="processing-list" :key="dish.id">
+                                        <span>{{dish.name}}</span>
+                                        <button type="button" @click='addToCompletedList(dish)'>Приготовлено</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="completed-container">
+                                <span>Готові до виносу:</span>
+                                <div>
+                                    <div v-for='dish in completedList' class="completed-list" :key='dish.id'>
+                                        <span>{{dish.name}}</span>
+                                        <button type="button" @click='clearCompletedList(dish)'>Подано</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

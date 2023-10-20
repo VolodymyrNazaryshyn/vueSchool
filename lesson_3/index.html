@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ua">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue lesson 3</title>
+    <link rel="icon" href="./img/logo.png" type="image/png">
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script defer src="./js/script.js"></script>
+</head>
+
+<body>
+    <img class="logo" src="./img/logo.png" title="Vue.js" width="100" alt="">
+    <h1>Vue.js д/з №3</h1>
+    <h2>Практика</h2>
+    <div class="tasks">
+        <section class="task">
+            <div class="app" id="app1">
+                <details>
+                    <summary>Задача №1</summary>
+                    <div class="task1-text">
+                        <p>
+                            Пари для танців.<br />
+                            Поступово вибираємо хлопця, дівчину і додаємо у обрані пари.<br />
+                            Пару можна видалити.<br />
+                            Поки не вибрано хлопця і дівчину кнопка «Додати» заблокована.<br />
+                            Якщо не вистачає хлопців або дівчат вибір також блокується.
+                        </p>
+                        <img src="./img/task1.jpg" width="300" alt="" />
+                    </div>
+                    <div class="solution1-top">
+                        <div class="solution1-main">
+                            <div>
+                                <span class="dancers__title">Хлопці</span>
+                                <div class="dancers">
+                                    <div v-for="m in maleList" :key="m.id" class="dancers__item"
+                                        :class="{ 'dancer-selected': m.id === isChosenMale }"
+                                        :style="{cursor: isFemaleArrayEmpty ? 'default' : 'pointer'}"
+                                        @click="!isFemaleArrayEmpty && selectItem(maleList, m.id)">
+                                        {{ m.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="dancers__title">Дівчата</span>
+                                <div v-if="!isFemaleArrayEmpty" class="dancers">
+                                    <span class="dancers__item" :class="{ 'dancer-selected': f.id === isChosenFemale }"
+                                        :style="{cursor: isMaleArrayEmpty ? 'default' : 'pointer'}"
+                                        v-for="f in femaleList" :key="f.id" @click="selectItem(femaleList, f.id)">
+                                        {{ f.name }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button :disabled="!isPairChosen" class="dancers__btn" @click="addPair()">Додати</button>
+                    </div>
+                    <div class="solution1-bottom">
+                        <span class="dancers__title">Обрані Пари</span>
+                        <div class="pairs">
+                            <span v-if="isPairArrayEmpty">Відсутні обрані пари</span>
+                            <div v-for="(p, index) in pairsList" :key="p.id" class="dancers__item pairs__item"
+                                :class="{'dancer-selected': p.id === isChosenPair}"
+                                @click="selectItem(pairsList, p.id)">
+                                {{p.male}}-{{p.female}}
+                                <button v-if="p.id === isChosenPair" class="dancers__btn"
+                                    @click="deletePair(index)">Видалити</button>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+        <section class="task">
+            <div class="app" id="app2">
+                <details>
+                    <summary>Задача №2</summary>
+                    <div class="task2-text">
+                        <p>
+                            Дано список автомобілів (марка, рік випуску, ціна). Сформувати елементи для фільтрування з
+                            використанням випадаючого списку (контент цих випадаючих списків сформувати у залежності від
+                            переданого списку).
+                        </p>
+                        <img src="./img/task2.jpg" width="300" alt="" />
+                    </div>
+                    <div >
+                        <div class="selects-wrapper">
+                            <div class="year">
+                                <select v-model="selectedYear">
+                                    <option disabled value="Sort by year">Sort by year</option>
+                                    <option v-for="year in getYearsList" :value="year" :key="year">
+                                        {{year}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="brand">
+                                <select v-model="selectedCarBrand">
+                                    <option disabled>Sort by brand</option>
+                                    <option v-for="brand in getCarBrandsList" :value="brand" :key="brand">
+                                        {{brand}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="auto-list">
+                            <div v-for="auto in autoList" :key="auto.id">
+                                {{auto.brand}} - {{auto.year}} р. - {{auto.price}}$
+                            </div>
+                        </div>
+                        <div class="no-results" v-if="!autoList.length">No results</div>
+                        <button class="clear-filters-btn" v-if="showButton" @click="clearFilters()">
+                            Clear filters
+                        </button>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
